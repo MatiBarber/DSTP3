@@ -1,38 +1,180 @@
+/* Estilos generales */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #121212;
+  color: #ffffff;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+}
+
 .App {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+h1 {
+  color: #1DB954;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+ul {
+  list-style-type: none;
+  padding: 0;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+li {
+  margin: 1rem 0;
+}
+
+/* Menú de navegación */
+nav ul {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  padding: 1rem 0;
+  background-color: #282828;
+}
+
+nav ul li {
+  margin: 0 1rem;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #ffffff;
+  font-size: 1.2rem;
+  transition: color 0.3s;
+}
+
+nav ul li a:hover {
+  color: #1DB954;
+}
+
+/* Estilos del buscador */
+form {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+input[type='text'] {
+  width: 300px;
+  padding: 0.5rem;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  margin-right: 10px;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  background-color: #1DB954;
+  border: none;
+  border-radius: 20px;
   color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-.App-link {
-  color: #61dafb;
+button:hover {
+  background-color: #1ed760;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+/* Estilo para las imágenes de los artistas o álbumes */
+img {
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+}
+
+li p {
+  margin-top: 10px;
+  font-size: 1.2rem;
+}
+
+/* Estilos de las listas de resultados.. */
+ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+li {
+  background-color: #282828;
+  padding: 1rem;
+  border-radius: 10px;
+  width: 150px;
+  text-align: center;
+  transition: transform 0.3s;
+}
+
+li:hover {
+  transform: scale(1.05);
+}
+
+/* Estilos para los detalles del artista */
+.artist-details {
+  margin-top: 2rem;
+  background-color: #282828;
+  padding: 1rem;
+  border-radius: 10px;
+  
+}
+
+.artist-details h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.artist-details img {
+  width: 200px;
+  height: 200px;
+  border-radius: 10%;
+  margin-bottom: 1rem;
+}
+
+.artist-details p {
+  font-size: 1.2rem;
+  line-height: 1.5;
+}
+
+/* Estilos para las canciones del álbum */
+.album-songs {
+  margin-top: 2rem;
+  background-color: #282828;
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+.album-songs h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.song-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.song-list li {
+  margin: 0.5rem 0;
+  font-size: 1.2rem;
+}
+
+/* Para mejorar el diseño en pantallas pequeñas */
+@media (max-width: 768px) {
+  input[type='text'] {
+    width: 80%;
   }
-  to {
-    transform: rotate(360deg);
+
+  .artist-details img {
+    width: 150px;
+    height: 150px;
+  }
+
+  .artist-details h2, .album-songs h2 {
+    font-size: 1.5rem;
   }
 }
