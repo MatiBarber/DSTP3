@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Buscador from './Buscador';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 function ArtistaBusqueda() {
   const CLIENT_ID = 'e4676a48d97f46bb836322bd65f6454a';
   const CLIENT_SECRET = '52fe108040ac451da9113dfe19ff3092';
+  const location = useLocation(); // Obtenemos el estado de la navegación
   const [token, setToken] = useState('');
-  const [artists, setArtists] = useState([]);
+  const [query, setQuery] = useState(location.state?.query || ''); // Cargar la búsqueda anterior si existe
+  const [artists, setArtists] = useState(location.state?.artists || []); // Cargar resultados previos si existen
 
   useEffect(() => {
     axios.post('https://accounts.spotify.com/api/token', 'grant_type=client_credentials', {
@@ -21,10 +23,9 @@ function ArtistaBusqueda() {
   }, []);
 
   const searchArtist = (artistName) => {
+    setQuery(artistName); // Guardar la búsqueda actual
     axios.get(`https://api.spotify.com/v1/search?q=${artistName}&type=artist`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${token}` },
     })
     .then(response => setArtists(response.data.artists.items))
     .catch(error => console.error('Error al buscar artista', error));
@@ -37,9 +38,16 @@ function ArtistaBusqueda() {
       <ul>
         {artists.map(artist => (
           <li key={artist.id}>
-            <Link to={`/artistas/${artist.id}`}>
+            <Link 
+              to={`/artistas/${artist.id}`} 
+              state={{ query, artists }} // Pasar la búsqueda y los resultados como estado
+            >
               {artist.images.length > 0 && (
-                <img src={artist.images[0].url} alt={artist.name} style={{ width: '100px', borderRadius: '50%' }} />
+                <img 
+                  src={artist.images[0].url} 
+                  alt={artist.name} 
+                  style={{ width: '100px', borderRadius: '50%' }} 
+                />
               )}
               <p>{artist.name}</p>
             </Link>
