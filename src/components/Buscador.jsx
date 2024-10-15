@@ -1,30 +1,26 @@
-import '../App.css';
-import Lista from './Lista';
+import React, { useState } from 'react';
 
-function Buscador(props) {
+function Buscador({ placeholder, onSearch }) {
+  const [query, setQuery] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (query.trim() !== '') {
+      onSearch(query); // Ejecutar la función de búsqueda pasada como prop//
+    }
+  };
+
   return (
-    <div className="Buscador">
-      <form onSubmit={props.searchArtist}>
-        <input 
-          type="text" 
-          value={props.artista} 
-          onChange={(e) => props.setArtista(e.target.value)} // Actualizamos el estado con el valor ingresado
-          placeholder="¿Qué artista quieres buscar?" 
-        />
-        <button type="submit">Buscar</button>
-      </form>    
-    </div>
-
-    
+    <form onSubmit={handleSubmit}>
+      <input 
+        type="text" 
+        placeholder={placeholder} 
+        value={query} 
+        onChange={(e) => setQuery(e.target.value)} 
+      />
+      <button type="submit">Buscar</button>
+    </form>
   );
 }
 
 export default Buscador;
-
-/*
-<form>
-            <input type='text' placeholder='¿Que quieres escuchar?'/>
-            <button type='submit'>Buscar</button>
-        </form>
-        <Lista></Lista>
-*/
