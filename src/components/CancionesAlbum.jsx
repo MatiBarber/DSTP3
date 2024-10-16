@@ -9,8 +9,10 @@ function CancionesAlbum() {
   const [canciones, setCanciones] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
-  const CLIENT_ID = 'e4676a48d97f46bb836322bd65f6454a';
-  const CLIENT_SECRET = '52fe108040ac451da9113dfe19ff3092';
+
+  // Obtener las credenciales desde localStorage
+  const CLIENT_ID = localStorage.getItem('clientId');
+  const CLIENT_SECRET = localStorage.getItem('clientSecret');
 
   // Obtener el token y datos del álbum
   useEffect(() => {
@@ -29,7 +31,7 @@ function CancionesAlbum() {
         setCanciones(response.data.tracks.items);
       })
       .catch(error => console.error('Error al obtener detalles del álbum', error));
-  }, [id]);
+  }, [id, CLIENT_ID, CLIENT_SECRET]); // Agregar CLIENT_ID y CLIENT_SECRET como dependencias
 
   // Verificar si la canción es favorita
   const isFavorite = (songId) => {

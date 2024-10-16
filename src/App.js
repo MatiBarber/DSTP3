@@ -1,12 +1,16 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
 import ArtistaBusqueda from './components/ArtistaBusqueda'; // Vista de búsqueda de artistas
 import AlbumBusqueda from './components/AlbumBusqueda'; // Vista de búsqueda de álbumes
 import DetallesArtista from './components/DetalleArtista'; // Componente de detalles del artista
 import CancionesAlbum from './components/CancionesAlbum'; // Componente de canciones del álbum
+import Login from './components/Login'; // Componente de login
 import './App.css';
 
 function App() {
+  const isAuthenticated = localStorage.getItem('clientId') && localStorage.getItem('clientSecret');
+  console.log(isAuthenticated);
+
   return (
     <Router>
       <div>
@@ -22,13 +26,26 @@ function App() {
           </ul>
         </nav>
 
-        {/* Configuración de rutas. */}
+        {/* Configuración de rutas */}
         <Routes>
-          <Route path="/artistas" element={<ArtistaBusqueda />} />
-          <Route path="/albumes" element={<AlbumBusqueda />} />
-          <Route path="/artistas/:id" element={<DetallesArtista />} /> {/* Ruta para detalles del artista */}
-          <Route path="/albumes/:id" element={<CancionesAlbum />} /> {/* Ruta para canciones del álbum */}
-          
+          <Route path="/" element={<Navigate to={isAuthenticated ? "/artistas" : "/login"} />} />
+          <Route path="/login" element={<Login />} />
+          <Route 
+            path="/artistas" 
+            element={isAuthenticated ? <ArtistaBusqueda /> : <Navigate to="/login" />} 
+          />
+          <Route 
+            path="/albumes" 
+            element={isAuthenticated ? <AlbumBusqueda /> : <Navigate to="/login" />} 
+          />
+          <Route 
+            path="/artistas/:id" 
+            element={isAuthenticated ? <DetallesArtista /> : <Navigate to="/login" />} 
+          />
+          <Route 
+            path="/albumes/:id" 
+            element={isAuthenticated ? <CancionesAlbum /> : <Navigate to="/login" />} 
+          />
         </Routes>
       </div>
     </Router>

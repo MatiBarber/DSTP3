@@ -1,3 +1,4 @@
+// DetalleArtista.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
@@ -9,41 +10,46 @@ function DetallesArtista() {
   const [artista, setArtista] = useState(null);
   const [albumes, setAlbumes] = useState([]);
   const [isFavorite, setIsFavorite] = useState(false);
-  const CLIENT_ID = 'e4676a48d97f46bb836322bd65f6454a';
-  const CLIENT_SECRET = '52fe108040ac451da9113dfe19ff3092';
+
+  // Obtener las credenciales desde localStorage
+  const CLIENT_ID = localStorage.getItem('clientId');
+  const CLIENT_SECRET = localStorage.getItem('clientSecret');
+
+  useEffect(() => {
+    axios
+      .post('https://accounts.spotify.com/api/token', 'grant_type=client_credentials', {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          Authorization: 'Basic ' + btoa(CLIENT_ID + ':' + CLIENT_SECRET),
+        },
+      })
+      .then(response => {
+        const token = response.data.access_token;
+
+        // Hacer dos solicitudes en paralelo: Detalles del artista y álbumes
+        const artistDetails = axios.get(`https://api.spotify.com/v1/artists/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const artistAlbums = axios.get(`https://api.spotify.com/v1/artists/${id}/albums`, {
+          headers: { Authorization: `Bearer ${token}` },
+          params: { limit: 10 },
+        });
+
+        return Promise.all([artistDetails, artistAlbums]);
+      })
+      .then(([artistResponse, albumsResponse]) => {
+        setArtista(artistResponse.data);
+        setAlbumes(albumsResponse.data.items);
+      })
+      .catch(error => console.error('Error al obtener los datos', error));
+  }, );
+  // [id]
 
   // Verificar si el artista es favorito al cargar la vista
   useEffect(() => {
     const favoritos = JSON.parse(localStorage.getItem('artistasfavoritos')) || [];
     setIsFavorite(favoritos.some(fav => fav.id === id));
-  }, [id]);
-
-  useEffect(() => {
-    axios.post('https://accounts.spotify.com/api/token', 'grant_type=client_credentials', {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        Authorization: 'Basic ' + btoa(CLIENT_ID + ':' + CLIENT_SECRET),
-      },
-    })
-    .then(response => {
-      const token = response.data.access_token;
-
-      const artistDetails = axios.get(`https://api.spotify.com/v1/artists/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      const artistAlbums = axios.get(`https://api.spotify.com/v1/artists/${id}/albums`, {
-        headers: { Authorization: `Bearer ${token}` },
-        params: { limit: 10 },
-      });
-
-      return Promise.all([artistDetails, artistAlbums]);
-    })
-    .then(([artistResponse, albumsResponse]) => {
-      setArtista(artistResponse.data);
-      setAlbumes(albumsResponse.data.items);
-    })
-    .catch(error => console.error('Error al obtener los datos', error));
   }, [id]);
 
   const toggleFavorite = () => {
@@ -84,7 +90,7 @@ function DetallesArtista() {
       <ul>
         {albumes.map(album => (
           <li key={album.id}>
-            <Link to={`/albumes/${album.id}`}> {/* Enlace para ir al detalle del álbum */}
+            <Link to={`/albumes/${album.id}`}>
               <img 
                 src={album.images[0]?.url} 
                 alt={album.name} 

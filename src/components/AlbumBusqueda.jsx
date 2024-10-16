@@ -5,28 +5,38 @@ import Buscador from './Buscador';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 function AlbumBusqueda() {
-  const CLIENT_ID = 'e4676a48d97f46bb836322bd65f6454a';
-  const CLIENT_SECRET = '52fe108040ac451da9113dfe19ff3092';
   const location = useLocation();
   const navigate = useNavigate();
+
   const [token, setToken] = useState('');
   const [artistName, setArtistName] = useState(location.state?.query || '');
   const [albums, setAlbums] = useState(location.state?.albums || []);
   const [favoritos, setFavoritos] = useState([]);
 
-  useEffect(() => {
-    axios
-      .post('https://accounts.spotify.com/api/token', 'grant_type=client_credentials', {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          Authorization: 'Basic ' + btoa(CLIENT_ID + ':' + CLIENT_SECRET),
-        },
-      })
-      .then(response => setToken(response.data.access_token))
-      .catch(error => console.error('Error al obtener el token', error));
-  }, []);
+  // Obtener las credenciales del localStorage
+  const CLIENT_ID = localStorage.getItem('clientId');
+  const CLIENT_SECRET = localStorage.getItem('clientSecret');
+  console.log(CLIENT_ID + ' ' + CLIENT_SECRET);
 
-  // Cargar canciones favoritas del localStorage
+  useEffect(() => {
+    if (!CLIENT_ID || !CLIENT_SECRET) {
+      // Redirigir al login si faltan credenciales
+      navigate('/login');
+    } else {
+      // Obtener el token utilizando las credenciales almacenadas
+      axios
+        .post('https://accounts.spotify.com/api/token', 'grant_type=client_credentials', {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            Authorization: 'Basic ' + btoa(CLIENT_ID + ':' + CLIENT_SECRET),
+          },
+        })
+        .then(response => setToken(response.data.access_token))
+        .catch(error => console.error('Error al obtener el token', error));
+    }
+  }, [CLIENT_ID, CLIENT_SECRET, navigate]);
+
+  // Cargar las canciones favoritas desde el localStorage
   useEffect(() => {
     const favoritosGuardados = JSON.parse(localStorage.getItem('cancionesfavoritas')) || [];
     setFavoritos(favoritosGuardados);
