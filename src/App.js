@@ -28,6 +28,7 @@ function App() {
           <Route path="/albumes" element={<AlbumBusqueda />} />
           <Route path="/artistas/:id" element={<DetallesArtista />} /> {/* Ruta para detalles del artista */}
           <Route path="/albumes/:id" element={<CancionesAlbum />} /> {/* Ruta para canciones del álbum */}
+          
         </Routes>
       </div>
     </Router>
