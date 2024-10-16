@@ -1,3 +1,10 @@
+# Enlace a la app en Netlify
+https://670f56ed06ee75ebfcdb73cd--aplicacionmusicaapispotify.netlify.app/
+
+##Recomendacion 
+Una vez haya escrito su Client ID y su Client Secret y presione Ingresar, recomiendo recargar la pagina
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
