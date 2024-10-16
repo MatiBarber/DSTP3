@@ -1,7 +1,7 @@
-# Enlace a la app en Netlify
+## Enlace a la app en Netlify
 https://670f56ed06ee75ebfcdb73cd--aplicacionmusicaapispotify.netlify.app/
 
-##Recomendacion 
+###Recomendacion 
 Una vez haya escrito su Client ID y su Client Secret y presione Ingresar, recomiendo recargar la pagina
 
 
